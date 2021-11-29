@@ -1,4 +1,6 @@
 const inquirer = require('inquirer');
+const fs = require('fs');
+const generatePage = require('./src/page-template.js');
 
 const promptUser = () => {
     return inquirer.prompt([
@@ -103,8 +105,8 @@ const promptProject = portfolioData => {
         },
         {
             type: "confirm",
-            name: "confirmAddProject",
-            message: "Would you like to enter another project",
+            name: "feature",
+            message: "Would you like to feature this project?",
             default: false
         },
         {
@@ -127,15 +129,12 @@ const promptProject = portfolioData => {
 promptUser()
     .then(promptProject)
     .then(portfolioData => {
-        console.log(portfolioData);
-    });
-// const fs = require('fs');
-// const generatePage = require('./src/page-template.js');
+        const pageHTML = generatePage(portfolioData);
 
-// const pageHTML = generatePage(name, github);
+        fs.writeFile("index.html", pageHTML, err => {
+          if (err) throw new Error(err);
 
-// fs.writeFile("index.html", pageHTML, err => {
-//   if (err) throw new err;
+          console.log("Portfolio is complete!  Check out index.html to see the output!");
+        });
+});
 
-//   console.log("Portfolio is complete!  Check out index.html to see the output!");
-// });
